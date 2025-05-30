@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Task</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <h2 class="text-2xl font-semibold mb-6 text-center">Update Task</h2>
+        <form method="POST" action="{% url 'update_task' task.id %}" class="space-y-4">
+            {% csrf_token %}
+            <input type="text" name="title" value="{{ task.title }}" class="w-full px-4 py-2 border rounded" required>
+            <textarea name="description" class="w-full px-4 py-2 border rounded">{{ task.description }}</textarea>
+            <select name="status" class="w-full px-4 py-2 border rounded" required>
+                <option value="pending" {% if task.status == 'pending' %}selected{% endif %}>Pending</option>
+                <option value="in_progress" {% if task.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                <option value="completed" {% if task.status == 'completed' %}selected{% endif %}>Completed</option>
+            </select>
+            <input type="date" name="deadline" value="{{ task.deadline|date:'Y-m-d' }}" class="w-full px-4 py-2 border rounded">
+            <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">Update</button>
+        </form>
+        <div class="mt-4 text-center">
+            <a href="{% url 'home' %}" class="text-blue-600 hover:underline">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
+    

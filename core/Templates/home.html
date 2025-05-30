@@ -1,0 +1,65 @@
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-semibold text-gray-700">Task Manager</h1>
+            <a href="{% url 'create_task' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">+ Add Task</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-5xl mx-auto px-6 py-8">
+        <h2 class="text-xl font-semibold mb-6">Your Tasks</h2>
+
+        {% if all_tasks %}
+        <div class="grid grid-cols-1 gap-4">
+            {% for task in all_tasks %}
+            <div class="bg-white rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition">
+                <div>
+                    <h3 class="text-lg font-semibold">{{ task.title }}</h3>
+                    <p class="text-sm text-gray-500">{{ task.description|default:"No description" }}</p>
+                    <p class="text-xs text-gray-400 mt-1">
+                        {% if task.deadline %}
+                            Due: {{ task.deadline|date:"M d, Y" }}
+                        {% else %}
+                            No deadline set
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="flex gap-2">
+                    <a href="{% url 'update_task' task.id %}" class="text-blue-600 hover:underline text-sm">Edit</a>
+                    <form action="{% url 'delete_task' task.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="text-red-500 hover:underline text-sm">Delete</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-gray-500 text-center mt-10">You don't have any tasks yet. Start by adding one.</p>
+        {% endif %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center text-sm text-gray-400 py-6 mt-auto">
+        &copy; {{ now|date:"Y" }} Task Manager. All rights reserved.
+    </footer>
+
+</body>
+</html>
+>
