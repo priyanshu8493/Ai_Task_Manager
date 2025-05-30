@@ -1,7 +1,7 @@
 from django.db import models
 import datetime
 from django.core.exceptions import ValidationError
-
+from django.contrib.auth.models import User
 
 STATUS_CHOICE = (
     ('todo', 'To Do'),
