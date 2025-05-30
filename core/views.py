@@ -88,6 +88,7 @@ def login_view(request):
             return redirect('login_view')
 
         user = authenticate(username = username, password = password)
+        
         if user is None:
             messages.error(request, "Invalid password")
             return redirect('login_view')

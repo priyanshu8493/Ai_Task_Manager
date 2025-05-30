@@ -28,6 +28,55 @@
 
         {% if all_tasks %}
         <div class="grid grid-cols-1 gap-4">
+    {% for task in all_tasks %}
+    <div class="
+        rounded-xl shadow p-4 flex justify-between items-center
+        {% if task.status == 'completed' %}
+            bg-green-50 border border-green-200
+        {% elif task.status == 'in_progress' %}
+            bg-yellow-50 border border-yellow-200
+        {% else %}
+            bg-red-50 border border-red-200
+        {% endif %}
+        hover:shadow-md transition
+    ">
+        <div>
+            <h3 class="text-lg font-semibold text-gray-800">{{ task.title }}</h3>
+            <p class="text-sm text-gray-600">{{ task.description|default:"No description" }}</p>
+            <p class="text-xs text-gray-500 mt-1">
+                {% if task.deadline %}
+                    Due: {{ task.deadline|date:"M d, Y" }}
+                {% else %}
+                    No deadline set
+                {% endif %}
+            </p>
+            <span class="
+                inline-block mt-2 text-xs font-medium px-2 py-1 rounded-full
+                {% if task.status == 'completed' %}
+                    bg-green-600 text-white
+                {% elif task.status == 'in_progress' %}
+                    bg-yellow-500 text-white
+                {% else %}
+                    bg-red-500 text-white
+                {% endif %}
+            ">
+                {{ task.status|title }}
+            </span>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex gap-2">
+            <a href="{% url 'update_task' task.id %}" class="text-blue-600 hover:underline text-sm">Edit</a>
+            <form action="{% url 'delete_task' task.id %}" method="post" onsubmit="return confirm('Delete this task?');">
+                {% csrf_token %}
+                <button type="submit" class="text-red-500 hover:underline text-sm">Delete</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+        <!-- <div class="grid grid-cols-1 gap-4">
             {% for task in all_tasks %}
             <div class="bg-white rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition">
                 <div>
@@ -49,7 +98,7 @@
                     </form>
                 </div>
             </div>
-            {% endfor %}
+            {% endfor %} -->
         </div>
         {% else %}
         <p class="text-gray-500 text-center mt-10">You don't have any tasks yet. Start by adding one.</p>
